@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Comisión</title>
+  <link rel="stylesheet" href="surprice.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    /* Estilo para el fondo */
+    body {
+      background-image: url('BG.png'); /* Ruta de la imagen */
+      background-size: 15% auto;            /* Escala la imagen al 50% de su tamaño original */
+      background-position: 0;     /* Centra la imagen en la página */
+      background-repeat: no-repeat;    /* Evita que la imagen se repita */
+      margin: 0;                       /* Elimina el margen por defecto del body */
+      padding: 0;                      /* Elimina el padding por defecto del body */
+    }
+
+    label, input, button, select, h2, p {
+      display: block;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>DATÁFONO</h1>
+  <p id="result">---</p>
+  
+  <label for="netAmount">     </label>
+  <input type="number" id="netAmount" placeholder=".........." size="10">
+
+  <label for="commissionRateSelect">    </label>
+  <select id="commissionRateSelect" onchange="toggleCustomRate()">
+    <option value="4.4">4.4%</option>
+    <option value="5">5%</option>
+    <option value="10">10%</option>
+    <option value="custom">Personalizado</option>
+  </select>
+
+  <!-- Campo de entrada para la comisión personalizada, oculto inicialmente -->
+  <input type="number" id="customCommissionRate" placeholder="Introduce la tasa de comisión" style="display: none;">
+
+  <button onclick="calculateTotal()">Calcular</button>
+  
+
+  <script>
+    function toggleCustomRate() {
+      const commissionSelect = document.getElementById("commissionRateSelect");
+      const customRateInput = document.getElementById("customCommissionRate");
+      
+      // Mostrar el campo personalizado solo si la opción seleccionada es "Personalizado" porque si no se rompe xd
+      if (commissionSelect.value === "custom") {
+        customRateInput.style.display = "block";
+      } else {
+        customRateInput.style.display = "none";
+      }
+    }
+
+    function calculateTotal() {
+      const netAmount = parseFloat(document.getElementById('netAmount').value);
+      const commissionSelect = document.getElementById("commissionRateSelect");
+      let commissionRate;
+
+      // Obtener el valor de la comisión según la selección
+      if (commissionSelect.value === "custom") {
+        commissionRate = parseFloat(document.getElementById("customCommissionRate").value);
+      } else {
+        commissionRate = parseFloat(commissionSelect.value);
+      }
+
+      if (isNaN(netAmount) || isNaN(commissionRate)) {
+        document.getElementById('result').innerText = 'Por favor, ingresa valores válidos.';
+        return;
+      }
+
+      const totalAmount = netAmount / (1 - commissionRate / 100);
+      document.getElementById('result').innerText = `$${totalAmount.toFixed(1)}`;
+    }
+  </script>
+</body>
+</html>
